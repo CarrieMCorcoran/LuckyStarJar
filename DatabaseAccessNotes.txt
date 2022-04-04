@@ -1,0 +1,112 @@
+The Jar, User, and Note classes are built to easily access data in the application that has
+been pulled from the database.  The getter methods in the respective classes can be used to get
+specific pieces of information.  For example, if you have a User object called u and you need the email, 
+it would be u.getUserEmail(); PLEASE DON'T TOUCH SETTER METHODS IN THE JAR, USER, OR NOTE CLASSES.  They
+are for the DatabaseAccess methods to use ONLY.  
+
+The DatabaseAccess methods are all static.  To call a specific DatabaseAccess method, the syntax is:
+DatabaseAccess.methodName(parameters);
+
+Here's how I envision the user's experience going:
+User signs in or creates account (there's some info in the User object after this step)
+User creates a jar or selects an existing jar (user object updated with jar info, Jar object is set up)
+If user is jar owner, gets jar owner menu
+Otherwise, they get user menu
+(I'll do scenario and activity diagrams for this at some point)
+
+
+DatabaseAccess Methods by process
+Check if user is in database:
+User getUser(String email)- returns a User object that matches the given email
+    address, or null if there's no user with that email.
+
+Google Authentification:
+String getGoogleAuthInfo(String email)- returns the googleAuthInfo for a given user's
+    email address, or an empty String if the email isn't in the database
+User getUser(String email)- returns a User object that matches the given email
+    address, or null if there's no user with that email.
+boolean updateGoogleAuthInfo(User u, String auth)- updates the database and the given
+    User object with the given Google Authentification information.  Returns true
+    if information was updated, otherwise false.
+	
+Create user:
+User createUser(String name, String userGoogleAuthInfo, String email)- adds a new
+    user to the database and returns a User object for the application to use
+	NOTE: Google Auth info can be set with this method, but if needed to be updated later, use
+boolean updateGoogleAuthInfo(User u, String auth)- updates the database and the given
+    User object with the given Google Authentification information.  Returns true
+    if information was updated, otherwise false.
+	
+Sign in user already in database:
+User getUser(String email)- returns a User object that matches the given email
+    address, or null if there's no user with that email.
+	
+Get list of jars user's in:
+ArrayList <Jar> getJarsForUser (int userID)- returns an ArrayList of all
+    Jars that the given user is a member of.  If the list is empty, the user
+    isn't part of any Jars yet.
+	
+Select specific jar for user:
+void getUserJarData(User u, int jarID)- updates a given User object with data
+    specific to the chosen Jar (userJarID, noteColor, and isOwner)
+	
+Create jar:
+Jar createJar(User u, int noteColor, Date openDate, int remFreq, String jarName)-
+    creates a new Jar in the database with the given information, creates and
+    sets a unique invite code, sets date of last reminder to date of creation,
+    sets the given user as the jar owner and updates 
+    the User object with the information specific to the new Jar (userJarID, note
+    color, and isOwner).  Returns the Jar object of the newly created Jar.
+    
+	
+Add note:
+Note createNote(int userJarID, String noteText, String userName)- adds a 
+    note with the given information to the database and returns a Note object
+	
+Delete note (user);
+ArrayList<Note> getOwnNotes(int userJarID)- returns an ArrayList of all notes a given user
+    has put in a given jar, as indicated by their userJarID.  If the list is empty,
+    the user hasn't put any notes in the jar yet.
+void removeNote(int noteID) Removes the note at the given noteID from the database
+
+Delete note (jar owner):
+ArrayList<Note> getAllNotes (int jarID)- returns all notes for a given jarID
+    in an ArrayList.  If the ArrayList is empty, the jar has no notes yet.
+void removeNote(int noteID) Removes the note at the given noteID from the database
+
+View All Users:
+ArrayList<User> getAllUsers (int jarID) returns an ArrayList of user objects for a
+    given jarID.  If the jar has no users, the ArrayList will be empty, but this
+    shouldn't happen.  All jars have 1 user at creation
+	
+Remove user (jar owner only):
+ArrayList<User> getAllUsers (int jarID) returns an ArrayList of user objects for a
+    given jarID.  If the jar has no users, the ArrayList will be empty, but this
+    shouldn't happen.  All jars have 1 user at creation
+void removeUserFromJar(int userJarID, Jar j) removes a user with the given userJarID
+    from the given Jar.  Also removes their notes and changes the inviteCode to a 
+    new unique number.
+	
+Delete jar (jar owner only):
+void deleteJar(User u, Jar j)- deletes the given Jar along with its userjar
+    relations and notes.  Sets the jar object to null and removes jar data from
+    User object.
+	
+Invite User: 
+The invite code will already be in the Jar object, so just use the getInviteCode() method
+on the Jar object.
+
+Open jar:
+ArrayList<Note> getAllNotes (int jarID)- returns all notes for a given jarID
+    in an ArrayList.  If the ArrayList is empty, the jar has no notes yet.
+
+Reminder emails:
+ArrayList<Jar> getAllJars()- returns an ArrayList of all Jars in the database.
+    If the list is empty, there are no Jars in the database.
+ArrayList<User> getAllUsers (int jarID) returns an ArrayList of user objects for a
+    given jarID.  If the jar has no users, the ArrayList will be empty, but this
+    shouldn't happen.  All jars have 1 user at creation
+Note getRandomNote(int jarID)- returns a random note from the jar, or null if
+    the jar has no notes in it yet.
+Jar updateReminderDate(Jar j)- updates the given Jar in the database
+    and the Jar object by setting the reminderDate to the current date.
