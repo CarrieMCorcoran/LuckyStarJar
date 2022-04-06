@@ -1,4 +1,4 @@
-package luckystarjar;
+
 
 public class User 
 {
