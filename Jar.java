@@ -1,5 +1,5 @@
 
-package luckystarjar;
+
 import java.sql.Date;
 
 
