@@ -97,8 +97,10 @@ The invite code will already be in the Jar object, so just use the getInviteCode
 on the Jar object.
 
 Open jar:
-ArrayList<Note> getAllNotes (int jarID)- returns all notes for a given jarID
-    in an ArrayList.  If the ArrayList is empty, the jar has no notes yet.
+ArrayList<Jar> getAllJars()- returns an ArrayList of all Jars in the database.
+    If the list is empty, there are no Jars in the database.
+User getJarOwner(int jarID)- returns the User data for the given jar's owner, to get the email address for the jar open email.
+ArrayList<Note> openJar(int jarID) -returns all notes from a given jar and sets the jar to opened so it can't be directly accessed by the app anymore.
 
 Reminder emails:
 ArrayList<Jar> getAllJars()- returns an ArrayList of all Jars in the database.
