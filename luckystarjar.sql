@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `luckystarjar` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `luckystarjar`;
 -- MySQL dump 10.13  Distrib 8.0.28, for Win64 (x86_64)
 --
 -- Host: localhost    Database: luckystarjar
@@ -31,8 +29,9 @@ CREATE TABLE `jar` (
   `inviteCode` int DEFAULT NULL,
   `jarName` varchar(55) DEFAULT NULL,
   `lastReminderDate` date DEFAULT NULL,
+  `wasOpened` int DEFAULT NULL,
   PRIMARY KEY (`jarID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +40,7 @@ CREATE TABLE `jar` (
 
 LOCK TABLES `jar` WRITE;
 /*!40000 ALTER TABLE `jar` DISABLE KEYS */;
-INSERT INTO `jar` VALUES (1,'2022-12-31',1,12345,'newJar','2022-04-03');
+INSERT INTO `jar` VALUES (1,'2022-12-31',1,12345,'newJar','2022-04-03',0);
 /*!40000 ALTER TABLE `jar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +116,7 @@ CREATE TABLE `userjar` (
   KEY `userID` (`userID`),
   CONSTRAINT `userjar_ibfk_1` FOREIGN KEY (`jarID`) REFERENCES `jar` (`jarID`),
   CONSTRAINT `userjar_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,4 +138,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-03 20:33:59
+-- Dump completed on 2022-04-06 20:04:19

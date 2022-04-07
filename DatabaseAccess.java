@@ -237,6 +237,32 @@ public class DatabaseAccess
     }
     
     
+    public static ArrayList<Note> openJar(int jarID) throws SQLException
+    {
+        ArrayList<Note>notes = DatabaseAccess.getAllNotes(jarID);
+        
+        Connection con;
+        Statement st;
+        String sql;
+        
+        //Connect to Database
+        con = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+        
+        //Execute query to set jar to opened
+        sql = "UPDATE jar SET wasOpened = 1 WHERE jarID = "+ jarID + ";";
+        
+        st = con.createStatement();
+        st.execute(sql);
+        
+        //Close connection
+        st.close();
+        con.close();
+        
+        
+        return notes;
+        
+    }
+    
     /*
     ArrayList<Note> getAllNotes (int jarID)- returns all notes for a given jarID
     in an ArrayList.  If the ArrayList is empty, the jar has no notes yet.
@@ -315,7 +341,7 @@ public class DatabaseAccess
         "FROM Jar " +
         "JOIN userjar ON userjar.jarID = jar.jarID " + 
         "JOIN user ON userjar.userID = user.userID " +
-        "WHERE user.userID = " + userID + ";";
+        "WHERE user.userID = " + userID + " AND jar.wasOpened = 0;";
         
         st = con.createStatement();
         results = st.executeQuery(sql);
@@ -363,7 +389,7 @@ public class DatabaseAccess
         con = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
         
         //Execute query to get all jars for a specific user
-        sql = "SELECT * FROM jar";
+        sql = "SELECT * FROM jar WHERE jar.wasOpened = 0;";
         
         st = con.createStatement();
         results = st.executeQuery(sql);
@@ -700,7 +726,7 @@ public class DatabaseAccess
     public static Jar createJar(User u, int noteColor, Date openDate, int remFreq, String jarName) throws SQLException
     {
         Connection con;
-        String createJar ="INSERT into jar VALUES(DEFAULT, ?, ?, ? ,? ,?);";
+        String createJar ="INSERT into jar VALUES(DEFAULT, ?, ?, ? ,? ,?, 0);";
         String getJarInfo = "SELECT jarID from jar WHERE jarID = (SELECT MAX(jarID) FROM jar);";
         String addUserToJar = "INSERT INTO userjar VALUES (DEFAULT, ?, ?, ?, ?);";
         String getUserJarData = "SELECT userjarID from userjar " + 
@@ -709,7 +735,7 @@ public class DatabaseAccess
         PreparedStatement st;
         Statement state;
         ResultSet results;
-        Jar j = null;
+        Jar j;
         int inviteCode;
         int jarID = 0;
         int userJarID = 0;
