@@ -1,5 +1,4 @@
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,6 +72,9 @@ public class DatabaseAccess
         state.close();
         con.close();
     }
+    
+    
+    
     
     /*
     void deleteJar(User u, Jar j)- deletes the given Jar along with its userjar
@@ -235,8 +237,31 @@ public class DatabaseAccess
         //Return list of users
         return googleAuthInfo;
     }
+    /*
+    User getJarOwner(int jarID) Returns the jar owner of the given jar
+    */
+    public static User getJarOwner(int jarID) throws SQLException
+    {
+        User u = null;
+        
+        //Gets all jar users
+        ArrayList<User> users = DatabaseAccess.getAllUsers(jarID);
+        
+        //Finds the jar owner in the list and assigns it to u
+        for(int count = 0; count < users.size(); count++)
+        {
+            if(users.get(count).isIsJarOwner())
+                u = users.get(count);
+        }
+        
+        return u;
+    }
     
     
+    /*
+    ArrayList<Note> openJar(int jarID) returns an arrayList of notes from the 
+    given jar and sets jar to opened so it won't appear in lists of jars anymore.
+    */
     public static ArrayList<Note> openJar(int jarID) throws SQLException
     {
         ArrayList<Note>notes = DatabaseAccess.getAllNotes(jarID);
