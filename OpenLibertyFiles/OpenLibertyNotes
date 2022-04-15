@@ -1,6 +1,0 @@
-Okay, so, it's not letting me upload the full openLiberty project because when you run it it generates a LOT of big files so it won't all fit on here.  So here's how to get your own OpenLiberty project to do what mine did.  I highly recommend going through 1 or 2 of the tutorials we have access to to get a basic gist of what Maven and OpenLiberty do.
-1) Go here https://aguibert.github.io/openliberty-cheat-sheet/#_getting_started and download the file they link to with the settings they suggest.  The only non-default thing I did here was call the artifactID (which is like the project name?) LuckyStarJar.
-2) Swap out their pom.xml and main folder with the ones I'm putting in here.
-3) Open up a command prompt or terminal (whatever it's called in your OS), and navigate to the folder containing pom.xml.  Use the command mvn liberty:dev and it'll run the project just like it says in the article I linked to, except go to http://localhost:9080/data/test to check it.  If you have the database running you should see two Note objects from the database.  The server will keep running until you hit ctrl c in the command line.
-
-HMU with any questions!
