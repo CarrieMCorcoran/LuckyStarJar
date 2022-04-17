@@ -1,0 +1,89 @@
+Google Authentification:
+@GET
+http://localhost:9080/star/system/controller/user/{email} returns the User object of the user
+with a given email, or null if the user isn't in our system.  To use, replace {email} with the email
+address in question on the path.
+	
+Create user:
+@POST
+http://localhost:9080/star/system/controller/user/add
+Returns the created User object.  To use, pass a JSON object with the following data:
+name: {user's preferred name},
+email: {user's email address}
+
+Sign in user already in database:
+@GET
+http://localhost:9080/star/system/controller/user/{email} returns the User object of the user
+with a given email as a JSON object, or null if the user isn't in our system.  To use, replace {email} with the email
+address in question on the path.
+
+Get list of jars user's in:
+@GET
+http://localhost:9080/star/system/controller/jars/{userID} returns an array of Jar JSON objects that
+the given user is in.  To use, replace {userID} with the user ID in question on the path.
+	
+Select specific jar for user:
+@GET
+http://localhost:9080/star/system/controller/userjar/{userID}/{jarID} returns an updated User object
+as a JSON object with the data specific to the relevant jar (whether they're the jar owner, the unique
+UserJar ID, and note color.)  To use, replace {userID} and {jarID} with the data in question on the path.
+	
+Create jar:
+@POST
+http://localhost:9080/star/system/controller/jar/add  returns the created Jar object as a JSON object.
+To use, pass a JSON object with the following data:
+userID: {ID of user creating jar},
+noteColor: {number corresponding with chosen note color},
+openDate: {date jar should open.  MUST BE IN FORM YYYY-MM-DD},
+remFreq: {number corresponding with chosen reminder frequency},
+jarName: {name user chose for jar}
+    
+	
+Add note:
+@POST
+http://localhost:9080/star/system/controller/note/add
+returns the create Note as a JSON object.
+To use, pass a JSON object with the following data:
+note: {note text},
+userJarID: {userJarID for the given user}
+name: {user's name}
+
+
+Get notes for a given user and jar:
+@GET
+http://localhost:9080/star/system/controller/notes/user/{userJarID}
+returns an array of notes for a given user/jar combination.  To use, replace {userJarID} with
+the userJarID in the path.
+
+Get notes for a given jar (jar owner only):
+@GET
+http://localhost:9080/star/system/controller/notes/jar/{jarID}
+returns an array of notes for a given jar.  To use, replace
+{jarID} with the ID of the jar in question on the path.
+
+
+Delete note:
+@DELETE
+http://localhost:9080/star/system/controller/note/delete/{noteID}
+deletes the note with the given ID.  To use, replace {noteID} with the ID of the note
+being deleted in the path.
+
+Get All Users:
+@GET
+http://localhost:9080/star/system/controller/users/jar/{jarID}
+returns an array of users for a given jar.  To use, replace {jarID} with the idea of the jar
+in question on the path.
+
+Remove user (jar owner only):
+@DELETE
+http://localhost:9080/star/system/controller/userjar/delete/{userJarID}
+removes a user with the given userJarID from the appropriate Jar.  To use, replace
+{userjarID} with the appropriate userJarID in the given path.
+	
+Delete jar (jar owner only):
+http://localhost:9080/star/system/controller/jar/delete/{userID}/{jarID}
+Deletes the jar with the given ID, and updates and returns the user with the given ID
+as a JSON object. To use, replace {userID} and {jarID} with the appropriate data.
+	
+Invite User: 
+To Be added once Ben finishes/posts that code.
