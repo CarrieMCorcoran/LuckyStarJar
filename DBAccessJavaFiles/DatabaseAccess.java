@@ -10,6 +10,32 @@ public class DatabaseAccess
     private static final String USER_NAME = "root";
     private static final String PASSWORD = "LuckyStarJar";
     
+    
+    //Returns the current date from the database
+    public static Date getDate() throws SQLException
+    {
+        Date d = null;
+        Connection con;
+        Statement st;
+        ResultSet results;
+        String getDate = "select current_date();";
+        
+        //Connect to database
+        con = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+        
+        //Execute query to get date
+        st = con.createStatement();
+        results = st.executeQuery(getDate);
+        
+        //Store result in Date variable
+        while(results.next())
+        {
+            d = results.getDate("current_date()");
+        }
+        return d;
+    }
+    
+    
     /*
     void removeUserFromJar(int userJarID, Jar j) removes a user with the given userJarID
     from the given Jar.  Also removes their notes and changes the inviteCode to a 
