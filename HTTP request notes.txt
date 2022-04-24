@@ -17,6 +17,14 @@ http://localhost:9080/star/system/controller/user/{email} returns the User objec
 with a given email as a JSON object, or null if the user isn't in our system.  To use, replace {email} with the email
 address in question on the path.
 
+Check if user has a valid invite code:
+@GET
+http://localhost:9080/star/system/controller/code/{inviteCode} returns a JSON object that contains true if the code is valid, else false.
+
+Add user to jar (to be used AFTER invite code is checked)
+http://localhost:9080/star/system/controller/user/jar/add/{inviteCode}/{noteColor}/{userID}
+Returns a JSON object of user data updated with userjar data.
+
 Get list of jars user's in:
 @GET
 http://localhost:9080/star/system/controller/jars/{userID} returns an array of Jar JSON objects that
@@ -27,6 +35,10 @@ Select specific jar for user:
 http://localhost:9080/star/system/controller/userjar/{userID}/{jarID} returns an updated User object
 as a JSON object with the data specific to the relevant jar (whether they're the jar owner, the unique
 UserJar ID, and note color.)  To use, replace {userID} and {jarID} with the data in question on the path.
+	
+Get number of notes in jar:
+@GET
+http://localhost:9080/star/system/controller/notecount/{jarID} returns the number of notes in the given jar as a JSON object.
 	
 Create jar:
 @POST
