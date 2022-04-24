@@ -13,6 +13,8 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -124,6 +126,44 @@ public class Controller {
     }
     
     @GET
+    @Path("/code/{inviteCode}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean checkInviteCode(@PathParam("inviteCode") int inviteCode)
+    {
+        boolean valid = false;
+        try
+        {
+            valid = DatabaseAccess.checkInviteCode(inviteCode);
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e);
+        }
+        
+        return valid;
+    }
+    
+    @GET
+    @Path("/notecount/{jarID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public int getNoteCount(@PathParam("jarID") int jarID)
+    {
+        int count = 0;
+        
+        try 
+        {
+            count = DatabaseAccess.getNoteCount(jarID);
+        }
+        catch (SQLException ex) 
+        {
+            System.out.println(ex);
+        }
+        
+        
+        return count;
+    }
+    
+    @GET
     @Path("/users/jar/{jarID}")
     @Produces(MediaType.APPLICATION_JSON)
     public User [] getUsersForJar(@PathParam("jarID")int jarID)
@@ -166,6 +206,26 @@ public class Controller {
         
         return u;
     }
+    
+    @POST
+    @Path("user/jar/add/{inviteCode}/{noteColor}/{userID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public User addUserToJar(@PathParam("inviteCode")int inviteCode, @PathParam("noteColor")int noteColor, @PathParam("userID")int userID)
+    {
+        User u = null;
+        
+        try
+        {
+            u = DatabaseAccess.addUserToJar(userID, inviteCode, noteColor);
+        }
+        catch (SQLException e)
+        {
+            System.out.println(e);
+        }
+        
+        return u;
+    }
+    
     
     @POST
     @Path("note/add")
@@ -239,11 +299,9 @@ public class Controller {
     @Path("userjar/delete/{userJarID}")
     public void removeUserFromJar(@PathParam("userJarID")int userJarID)
     {
-        Jar j;
         try
         {
-            j = DatabaseAccess.getjar(userJarID);
-            DatabaseAccess.removeUserFromJar(userJarID, j);
+            DatabaseAccess.removeUserFromJar(userJarID);
         }
         catch(SQLException e)
         {
