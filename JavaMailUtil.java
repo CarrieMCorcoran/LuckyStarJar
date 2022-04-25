@@ -15,7 +15,7 @@ public class JavaMailUtil {
        // Invite methods for adding a user to the jar.
     
     public static void sendInviteEmail(String recepient, String jarOwner, int inviteCode) throws Exception
-    {
+    {      
         System.out.println("Preparing automated message...");
         Properties properties = new Properties();
         
@@ -72,7 +72,7 @@ public class JavaMailUtil {
     }
     
     // Email for returning a random note in the jar
-    public static void getReminderNote(String recepient, int jarID) throws Exception
+    public static void sendReminderNote(String recepient, int jarID) throws Exception
     {
         // Grab a random note
         // Access database
@@ -128,7 +128,7 @@ public class JavaMailUtil {
                 InternetAddress(recepient));
             if (randomNote == null)
             {
-                message.setSubject("You Have no Messages in your Jar!");
+                message.setSubject("You Have no Messages in your Lucky Star Jar!");
                 message.setText("We wanted to send you a random note from your "
                 + "Lucky star Jar, but per the frequency of your reminder,\n"
                 + "We found no notes in your jar!\nHurry up and put some positive"
