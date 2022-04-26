@@ -1,6 +1,9 @@
 package luckystaremailapi.javamail;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class OpenJar {
     // OpenJar opens the jar of a specific jar owner whcih emails all of the notes
@@ -8,13 +11,38 @@ public class OpenJar {
     
     public static void OpenJarTimer(int jarID) throws SQLException, Exception
     {
-        // Pull the user information to use for email
-        User userEmail = DatabaseAccess.getJarOwner(jarID);
+        // Create the format of the date and time
+        Calendar calendar = Calendar.getInstance();
+
+        // Create a new instance of the date
+        Date date = new Date(calendar.getTime().getTime());
         
-        // Call the openJar Email
-        JavaMailUtil.sendOpenMail(userEmail.getUserEmail(), jarID);
+        // Pull all the jars from the database
+        ArrayList<Jar> jarList = DatabaseAccess.getAllJars();
         
-        // Call openJar to close the jar
-        DatabaseAccess.openJar(jarID);
+        // For loop to loop through all the jars
+        for (int index = 0; index < jarList.size(); index++)
+        {
+            // Index the jars
+            Jar jarOpen = jarList.get(index);
+            
+            // Compare the open date to the current date
+            int openOrNot = date.compareTo(jarOpen.getOpenDate());
+            
+            // if statement to determine if the jar needs to be opened or not
+            // OpenOrNot being greater than or equal to zero means the current
+            // date is past or equal to the open date
+            if (openOrNot >= 0)
+            {
+                // Pull the user information to use for email
+                User userEmail = DatabaseAccess.getJarOwner(jarID);
+        
+                // Call the openJar Email
+                JavaMailUtil.sendOpenMail(userEmail.getUserEmail(), jarID);
+        
+                // Call openJar to close the jar forever
+                DatabaseAccess.openJar(jarID);
+            }
+        }
     }
 }
