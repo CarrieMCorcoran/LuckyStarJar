@@ -7,10 +7,12 @@ import java.util.Date;
 
 public class Reminder 
 {
-     public static void ReminderTimer() throws SQLException, Exception
+    public static void ReminderTimer() throws SQLException, Exception
      {
         // Local variables
-        int openOrNot;
+        long daysPassed;
+        long difference;
+        ArrayList<User>allUsers;
 
         // Create the format of the date and time
         Calendar calendar = Calendar.getInstance();
@@ -20,12 +22,14 @@ public class Reminder
 
         // Pull all the jars from the database
         ArrayList<Jar> jarList = DatabaseAccess.getAllJars();
-
+        
         // For loop to loop through all of the jars
         for (int index = 0; index < jarList.size(); index++)
         { 
             // Pull the user information to use for email
-            User userEmail = DatabaseAccess.getJarOwner(index);
+            allUsers = DatabaseAccess.getAllUsers(jarList.get(index).getJarID());
+            
+            System.out.println(allUsers.size());
             
             // Grab the reminder frequency and last reminder date from the jar
             Jar jarReminder = jarList.get(index);
@@ -35,33 +39,46 @@ public class Reminder
             Date reminderDate = jarReminder.getLastReminderDate();
 
             // Check if the last Reminder Date is past the current date
-            openOrNot = date.compareTo(reminderDate);
+            difference = date.getTime() - reminderDate.getTime();
+            daysPassed = difference / (1000*60*60*24);
+            System.out.println(daysPassed);
 
             // Check for each reminder frequency of the jar
             // OpenOrNot being greater than or equal to zero means the current
             // date is past or equal to the reminder date
-            if (openOrNot >= 0 && frequency == 2) // Monthly reminder
+            if (daysPassed >=30 && frequency == 2) // Monthly reminder
             {
-                // Call the reminder email method
-                JavaMailUtil.sendReminderNote(userEmail.getUserEmail(), jarReminder.getJarID());
+                //Call reminder email method for each user
+                for(int count = 0; count < allUsers.size(); count++)
+                {
+                    JavaMailUtil.sendReminderNote(allUsers.get(count).getUserEmail(), jarReminder.getJarID());
+                }
+
+                
                 
                 // Update the next reminder date
                 DatabaseAccess.updateReminderDate(jarReminder);
             }
 
-            else if (openOrNot >= 0 && frequency == 1) // Weekly reminder
+            else if (daysPassed >= 7 && frequency == 1) // Weekly reminder
             {
-                // Call the reminder email method
-                JavaMailUtil.sendReminderNote(userEmail.getUserEmail(), jarReminder.getJarID());
+                //Call reminder email method for each user
+                for(int count = 0; count < allUsers.size(); count++)
+                {
+                    JavaMailUtil.sendReminderNote(allUsers.get(count).getUserEmail(), jarReminder.getJarID());
+                }
                 
                 // Update the next reminder date
                 DatabaseAccess.updateReminderDate(jarReminder);
             }
 
-            else if (openOrNot >= 0 && frequency == 0) // Daily reminder
+            else if (daysPassed>=1 && frequency == 0) // Daily reminder
             {
-                // Call the reminder email method
-                JavaMailUtil.sendReminderNote(userEmail.getUserEmail(), jarReminder.getJarID());
+                //Call reminder email method for each user
+                for(int count = 0; count < allUsers.size(); count++)
+                {
+                    JavaMailUtil.sendReminderNote(allUsers.get(count).getUserEmail(), jarReminder.getJarID());
+                }
                 
                 // Update the next reminder date
                 DatabaseAccess.updateReminderDate(jarReminder);
