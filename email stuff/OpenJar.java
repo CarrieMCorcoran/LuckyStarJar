@@ -9,7 +9,7 @@ public class OpenJar {
     // OpenJar opens the jar of a specific jar owner whcih emails all of the notes
     // contained within the jar
     
-    public static void OpenJarTimer(int jarID) throws SQLException, Exception
+     public static void OpenJarTimer() throws Exception
     {
         // Create the format of the date and time
         Calendar calendar = Calendar.getInstance();
@@ -35,13 +35,11 @@ public class OpenJar {
             if (openOrNot >= 0)
             {
                 // Pull the user information to use for email
-                User userEmail = DatabaseAccess.getJarOwner(jarID);
+                User userEmail = DatabaseAccess.getJarOwner(jarOpen.getJarID());
         
                 // Call the openJar Email
-                JavaMailUtil.sendOpenMail(userEmail.getUserEmail(), jarID);
+                JavaMailUtil.sendOpenMail(userEmail.getUserEmail(), jarOpen.getJarID());
         
-                // Call openJar to close the jar forever
-                DatabaseAccess.openJar(jarID);
             }
         }
     }
