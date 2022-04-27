@@ -4,6 +4,7 @@
   <featureManager>
       <feature>restfulWS-3.0</feature>
       <feature>jsonb-2.0</feature>
+      <feature>javaMail-1.6</feature>
   </featureManager>
     
 
