@@ -16,7 +16,7 @@ public class JavaMailUtil {
     
     public static void sendInviteEmail(String recepient, String jarOwner, int inviteCode) throws Exception
     {      
-        System.out.println("Preparing automated message...");
+
         Properties properties = new Properties();
         
         properties.put("mail.smtp.auth", "true");
@@ -39,7 +39,6 @@ public class JavaMailUtil {
         Message invite_message = prepareInviteMessage(session, myAccountEmail, recepient, jarOwner, inviteCode);
         
         Transport.send(invite_message);
-        System.out.println("Message sent successfully to the user.");
     }
     
     private static Message prepareInviteMessage(Session session, String 
@@ -76,22 +75,26 @@ public class JavaMailUtil {
     {
         // Grab a random note
         // Access database
-        ArrayList <Note> Notes = DatabaseAccess.openJar(jarID);
+        ArrayList <Note> Notes = DatabaseAccess.getAllNotes(jarID);
+        String positiveNote;
+        if(Notes.size() > 0)
+        {
+            // Random number generator from 0 to note size
+            int amountOfNotes = Notes.size();
+            Random rand = new Random();
+
+            // Get the random index of a string positive note
+            int randomJarNote = rand.nextInt(amountOfNotes);
+
+            // Grab the note text
+            Note n = Notes.get(randomJarNote);
+
+            // Convert the note into a string and get the text layout
+            positiveNote = n.getNoteText();
+        }
+        else
+            positiveNote = null;
         
-        // Random number generator from 0 to note size
-        int amountOfNotes = Notes.size();
-        Random rand = new Random();
-        
-        // Get the random index of a string positive note
-        int randomJarNote = rand.nextInt(amountOfNotes);
-        
-        // Grab the note text
-        Note n = Notes.get(randomJarNote);
-        
-        // Convert the note into a string and get the text layout
-        String positiveNote = n.getNoteText();
-        
-        System.out.println("Preparing automated message...");
         Properties properties = new Properties();
         
         properties.put("mail.smtp.auth", "true");
@@ -115,7 +118,6 @@ public class JavaMailUtil {
                 myAccountEmail, recepient, positiveNote);
         
         Transport.send(reminder_message);
-        System.out.println("Message sent successfully to the user.");
     }
     
     private static Message prepareReminderMessage(Session session, String 
@@ -130,8 +132,8 @@ public class JavaMailUtil {
             {
                 message.setSubject("You Have no Messages in your Lucky Star Jar!");
                 message.setText("We wanted to send you a random note from your "
-                + "Lucky star Jar, but per the frequency of your reminder,\n"
-                + "We found no notes in your jar!\nHurry up and put some positive"
+                + "Lucky star Jar, but"
+                + "we found no notes in your jar!\nHurry up and put some positive"
                 + " notes in that jar so you can share the memories with yourself"
                 + ", your friends and your family!\n");
             }
@@ -172,7 +174,6 @@ public class JavaMailUtil {
             
             totalNotes += noteLine;
         }
-        System.out.println("Preparing automated message...");
         Properties properties = new Properties();
         
         properties.put("mail.smtp.auth", "true");
@@ -195,7 +196,6 @@ public class JavaMailUtil {
         Message open_message = prepareOpenMessage(session, myAccountEmail, recepient, totalNotes);
         
         Transport.send(open_message);
-        System.out.println("Message sent successfully to the user.");
     }
     
     private static Message prepareOpenMessage(Session session, String 
