@@ -1,4 +1,5 @@
 
+
 package com.example.LuckyStarJar;
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ public class DatabaseAccess
 {
     private static final String URL = "jdbc:mysql://localhost:3306/luckystarjar";
     private static final String USER_NAME = "root";
-    private static final String PASSWORD = "qwe654EWQ";
+    private static final String PASSWORD = "LuckyStarJar";
     
     public static Jar getjar(int jarID) throws SQLException
     {
@@ -62,11 +63,12 @@ public class DatabaseAccess
     from the given Jar.  Also removes their notes and changes the inviteCode to a 
     new unique number.
     */
-    public static void removeUserFromJar(int userJarID, Jar j) throws SQLException
+    public static void removeUserFromJar(int userJarID) throws SQLException
     {
         Connection con;
         PreparedStatement st;
         Statement state;
+        String getJar = "select jarID from userjar where userJarID = " + userJarID + ";";
         String removeUser = "DELETE FROM userjar WHERE userjarID = "+ userJarID + ";";
         String removeNotes = "DELETE FROM note WHERE userjarID = " + userJarID + ";";
         String changeInviteCode= "UPDATE jar SET inviteCode = ? WHERE jarID = ?;";
@@ -75,12 +77,20 @@ public class DatabaseAccess
         int inviteCode;
         int count = 1;
         boolean unique = false;
+        int jarID = 0;
         
         Random rand = new Random();
         
         //Connect to Database
         con = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
         
+        state = con.createStatement();
+        results = state.executeQuery(getJar);
+        
+        while(results.next())
+        {
+            jarID = results.getInt(1);
+        }
         
         //remove user
         st = con.prepareStatement(removeUser);
@@ -112,7 +122,7 @@ public class DatabaseAccess
         //Update jar with new code
         st = con.prepareStatement(changeInviteCode);
         st.setInt(1, inviteCode);
-        st.setInt(2, j.getJarID());
+        st.setInt(2, jarID);
         
         //Close database connection
         st.close();
