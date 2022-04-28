@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -23,6 +24,8 @@ import java.util.logging.Logger;
 
 public class Controller {
 
+
+    
     @GET
     @Path("/user/{email}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -216,7 +219,8 @@ public class Controller {
         
         try
         {
-            u = DatabaseAccess.addUserToJar(userID, inviteCode, noteColor);
+            u = DatabaseAccess.getUser(userID);
+            u = DatabaseAccess.addUserToJar(u, inviteCode, noteColor);
         }
         catch (SQLException e)
         {
@@ -331,3 +335,4 @@ public class Controller {
     }
     
 }
+
