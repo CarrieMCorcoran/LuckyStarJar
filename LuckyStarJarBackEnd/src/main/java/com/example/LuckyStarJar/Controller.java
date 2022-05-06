@@ -24,36 +24,6 @@ import java.util.logging.Logger;
 
 public class Controller {
 
-    @GET
-    @Path("invite/{email}/{jarID}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String inviteUser(@PathParam("email") String email, @PathParam("jarID")int jarID)
-    {
-        Jar j;
-        User u;
-        String inviterName;
-        int inviteCode;
-        String success = "no";
-        
-        try 
-        {
-            j = DatabaseAccess.getjar(jarID);
-            success = j.getJarName();
-            u = DatabaseAccess.getJarOwner(jarID);
-            inviteCode = j.getInviteCode();
-            inviterName = u.getName();
-            success = "yes";
-            JavaMailUtil.sendInviteEmail(email, inviterName, inviteCode);
-
-            
-        } 
-        catch (Exception e) 
-        {
-            System.out.println(e);
-            success = e.getMessage();
-        }
-        return success;
-    }
     
     @GET
     @Path("/user/{email}")
